@@ -30,9 +30,9 @@ func NewBookingRepo(db *sql.DB) *bookingRepo {
 func (r *bookingRepo) Save(ctx context.Context, booking domain.Booking) error {
 	bookingSQLStruct := sqlbuilder.NewStruct(new(sqlBooking))
 	query, args := bookingSQLStruct.InsertInto(sqlTable, sqlBooking{
-		ID:       booking.ID,
-		PetName:  booking.PetName,
-		Duration: booking.Duration,
+		ID:       booking.ID.String(),
+		PetName:  booking.PetName.String(),
+		Duration: booking.Duration.String(),
 	}).Build()
 
 	_, err := r.db.ExecContext(ctx, query, args...)

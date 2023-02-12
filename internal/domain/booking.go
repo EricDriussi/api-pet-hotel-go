@@ -2,20 +2,12 @@ package domain
 
 import (
 	"context"
-	"errors"
 )
 
-var ErrInvalidBookingID = errors.New("invalid Booking ID")
-
-var ErrEmptyPetName = errors.New("the field Pet Name can not be empty")
-
-var ErrEmptyDuration = errors.New("the field Duration can not be empty")
-
-// TODO.VO
 type Booking struct {
-	ID       string
-	PetName  string
-	Duration string
+	ID       BookingID
+	PetName  PetName
+	Duration BookingDuration
 }
 
 type BookingRepository interface {
@@ -23,9 +15,22 @@ type BookingRepository interface {
 }
 
 func NewBooking(id, name, duration string) (Booking, error) {
+	idVO, err := NewBookingID(id)
+	if err != nil {
+		return Booking{}, err
+	}
+	nameVO, err := NewPetName(name)
+	if err != nil {
+		return Booking{}, err
+	}
+	durationVO, err := NewBookingDuration(duration)
+	if err != nil {
+		return Booking{}, err
+	}
+
 	return Booking{
-		ID:       id,
-		PetName:  name,
-		Duration: duration,
+		ID:       idVO,
+		PetName:  nameVO,
+		Duration: durationVO,
 	}, nil
 }

@@ -9,15 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type postBookingRequest struct {
-	ID       string `json:"id" binding:"required"`
-	PetName  string `json:"name" binding:"required"`
-	Duration string `json:"duration" binding:"required"`
-}
-
 func PostBooking(applicationService application.Booking) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var req postBookingRequest
+		var req PostBookingRequest
 		if err := ctx.BindJSON(&req); err != nil {
 			ctx.JSON(http.StatusBadRequest, err.Error())
 			return
