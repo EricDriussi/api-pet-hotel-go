@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	app "github.com/EricDriussi/api-pet-hotel-go/internal/application"
-	repo "github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/repositories/mysql_repo"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/repositories/mysql_repo"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -35,8 +35,8 @@ func bootstrap() error {
 		return err
 	}
 
-	bookingRepository := repo.NewBookingRepo(db)
-	bookingService := app.NewBookingService(bookingRepository)
+	bookingRepository := mysqlrepo.NewBooking(db)
+	bookingService := service.NewBooking(bookingRepository)
 
 	srv := server.New(host, port, bookingService)
 	return srv.Run()

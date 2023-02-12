@@ -1,11 +1,11 @@
-package repositories
+package mysqlrepo
 
 import (
 	"context"
 	"database/sql"
 	"fmt"
 
-	"github.com/EricDriussi/api-pet-hotel-go/internal/domain"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/booking"
 	"github.com/huandu/go-sqlbuilder"
 )
 
@@ -23,21 +23,20 @@ type bookingRepo struct {
 	db *sql.DB
 }
 
-func NewBookingRepo(db *sql.DB) *bookingRepo {
+func NewBooking(db *sql.DB) *bookingRepo {
 	return &bookingRepo{db: db}
 }
 
 func (r *bookingRepo) Save(ctx context.Context, booking domain.Booking) error {
 	bookingSQLStruct := sqlbuilder.NewStruct(new(sqlBooking))
 	query, args := bookingSQLStruct.InsertInto(sqlTable, sqlBooking{
-		ID:       booking.ID.String(),
-		PetName:  booking.PetName.String(),
-		Duration: booking.Duration.String(),
+		ID:       booking.IDAsString(),
+		PetName:  booking.PetNameAsString(),
+		Duration: booking.DurationAsString(),
 	}).Build()
 
-	_, err := r.db.ExecContext(ctx, query, args...)
-	if err != nil {
-		return fmt.Errorf("error trying to persist booking: %v", err)
+	if _, err := r.db.ExecContext(ctx, query, args...); err != nil {
+		return fmt.Errorf("error persisting booking: %v", err)
 	}
 
 	return nil

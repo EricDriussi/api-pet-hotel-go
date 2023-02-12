@@ -5,7 +5,7 @@ package mocks
 import (
 	context "context"
 
-	domain "github.com/EricDriussi/api-pet-hotel-go/internal/domain"
+	domain "github.com/EricDriussi/api-pet-hotel-go/internal/domain/booking"
 	mock "github.com/stretchr/testify/mock"
 )
 

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/EricDriussi/api-pet-hotel-go/internal/application"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server/controllers"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,10 +13,10 @@ type Server struct {
 	httpAddr string
 	engine   *gin.Engine
 
-	applicationService application.Booking
+	applicationService service.Booking
 }
 
-func New(host string, port uint, bookingService application.Booking) Server {
+func New(host string, port uint, bookingService service.Booking) Server {
 	srv := Server{
 		engine:   gin.New(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),

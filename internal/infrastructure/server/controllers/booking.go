@@ -4,12 +4,18 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/EricDriussi/api-pet-hotel-go/internal/application"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/domain"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/booking"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
 	"github.com/gin-gonic/gin"
 )
 
-func PostBooking(applicationService application.Booking) gin.HandlerFunc {
+type PostBookingRequest struct {
+	ID       string `json:"id" binding:"required"`
+	PetName  string `json:"name" binding:"required"`
+	Duration string `json:"duration" binding:"required"`
+}
+
+func PostBooking(applicationService service.Booking) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var req PostBookingRequest
 		if err := ctx.BindJSON(&req); err != nil {
@@ -17,7 +23,7 @@ func PostBooking(applicationService application.Booking) gin.HandlerFunc {
 			return
 		}
 
-		err := applicationService.CreateBooking(ctx, req.ID, req.PetName, req.Duration)
+		err := applicationService.RegisterBooking(ctx, req.ID, req.PetName, req.Duration)
 		if err != nil {
 			switch {
 			case errors.Is(err, domain.ErrInvalidBookingID),
