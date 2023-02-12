@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/repositories/mysql_repo"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/command_bus/in_memory"
+	mysqlrepo "github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/repositories/mysql_repo"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
+	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus/commands"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus/handlers"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -38,6 +41,10 @@ func bootstrap() error {
 	bookingRepository := mysqlrepo.NewBooking(db)
 	bookingService := service.NewBooking(bookingRepository)
 
-	srv := server.New(host, port, bookingService)
+	inMemoryCommandBus := inmemory.NewCommandBus()
+	createBookingCommandHandler := handlers.NewCreateBooking(bookingService)
+	inMemoryCommandBus.Register(commands.CreateBookingCommandType, createBookingCommandHandler)
+
+	srv := server.New(host, port, inMemoryCommandBus)
 	return srv.Run()
 }

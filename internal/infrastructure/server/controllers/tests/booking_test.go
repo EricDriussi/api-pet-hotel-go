@@ -7,8 +7,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/command_bus/in_memory"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server/controllers"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
+	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus/commands"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus/handlers"
 	"github.com/EricDriussi/api-pet-hotel-go/test/mocks"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -25,19 +28,22 @@ func TestController_PostBooking(t *testing.T) {
 	).Return(nil)
 
 	bookingService := service.NewBooking(repositoryMock)
+	commandBus := inmemory.NewCommandBus()
+	createBookingCommandHandler := handlers.NewCreateBooking(bookingService)
+	commandBus.Register(commands.CreateBookingCommandType, createBookingCommandHandler)
 
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
-	r.POST("/booking", controllers.PostBooking(bookingService))
+	r.POST("/booking", controllers.PostBooking(commandBus))
 
 	t.Run("return 201 when given a valid request", func(t *testing.T) {
-		createCourseReq := controllers.PostBookingRequest{
+		createBookingReq := controllers.PostBookingRequest{
 			ID:       "8a1c5cdc-ba57-445a-994d-aa412d23723f",
 			PetName:  "A Pet",
 			Duration: "1 months",
 		}
 
-		b, err := json.Marshal(createCourseReq)
+		b, err := json.Marshal(createBookingReq)
 		require.NoError(t, err)
 
 		req, err := http.NewRequest(http.MethodPost, "/booking", bytes.NewBuffer(b))
@@ -53,12 +59,12 @@ func TestController_PostBooking(t *testing.T) {
 	})
 
 	t.Run("returns 400 when given a partial request", func(t *testing.T) {
-		createCourseReq := controllers.PostBookingRequest{
+		createBookingReq := controllers.PostBookingRequest{
 			PetName:  "A Pet",
 			Duration: "1 months",
 		}
 
-		b, err := json.Marshal(createCourseReq)
+		b, err := json.Marshal(createBookingReq)
 		require.NoError(t, err)
 
 		req, err := http.NewRequest(http.MethodPost, "/booking", bytes.NewBuffer(b))
@@ -74,13 +80,13 @@ func TestController_PostBooking(t *testing.T) {
 	})
 
 	t.Run("returns 400 when given a request with invalid id", func(t *testing.T) {
-		createCourseReq := controllers.PostBookingRequest{
+		createBookingReq := controllers.PostBookingRequest{
 			ID:       "ba57",
 			PetName:  "A Pet",
 			Duration: "1 months",
 		}
 
-		b, err := json.Marshal(createCourseReq)
+		b, err := json.Marshal(createBookingReq)
 		require.NoError(t, err)
 
 		req, err := http.NewRequest(http.MethodPost, "/booking", bytes.NewBuffer(b))

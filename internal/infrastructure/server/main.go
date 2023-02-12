@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server/controllers"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
+	commandbus "github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,15 +13,15 @@ type Server struct {
 	httpAddr string
 	engine   *gin.Engine
 
-	applicationService service.Booking
+	commandBus commandbus.Bus
 }
 
-func New(host string, port uint, bookingService service.Booking) Server {
+func New(host string, port uint, bookingService commandbus.Bus) Server {
 	srv := Server{
 		engine:   gin.New(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
 
-		applicationService: bookingService,
+		commandBus: bookingService,
 	}
 
 	srv.registerRoutes()
@@ -35,5 +35,5 @@ func (s *Server) Run() error {
 
 func (s *Server) registerRoutes() {
 	s.engine.GET("/health", controllers.Health)
-	s.engine.POST("/booking", controllers.PostBooking(s.applicationService))
+	s.engine.POST("/booking", controllers.PostBooking(s.commandBus))
 }

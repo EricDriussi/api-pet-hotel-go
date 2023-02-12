@@ -4,8 +4,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/booking"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
+	domain "github.com/EricDriussi/api-pet-hotel-go/internal/domain/booking"
+	commandbus "github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus/commands"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,7 +16,7 @@ type PostBookingRequest struct {
 	Duration string `json:"duration" binding:"required"`
 }
 
-func PostBooking(applicationService service.Booking) gin.HandlerFunc {
+func PostBooking(commandBus commandbus.Bus) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var req PostBookingRequest
 		if err := ctx.BindJSON(&req); err != nil {
@@ -23,7 +24,11 @@ func PostBooking(applicationService service.Booking) gin.HandlerFunc {
 			return
 		}
 
-		err := applicationService.RegisterBooking(ctx, req.ID, req.PetName, req.Duration)
+		err := commandBus.Dispatch(ctx, commands.NewCreateBooking(
+			req.ID,
+			req.PetName,
+			req.Duration,
+		))
 		if err != nil {
 			switch {
 			case errors.Is(err, domain.ErrInvalidBookingID),
