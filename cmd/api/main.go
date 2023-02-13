@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
@@ -45,6 +46,10 @@ func bootstrap() error {
 	createBookingCommandHandler := handlers.NewCreateBooking(bookingService)
 	inMemoryCommandBus.Register(commands.CreateBookingCommandType, createBookingCommandHandler)
 
-	srv := server.New(host, port, inMemoryCommandBus)
+	// srv := server.New(host, port, inMemoryCommandBus)
+	// return srv.Run()
+
+	cleanContext := context.Background()
+	srv := server.NewGraceful(cleanContext, host, port, inMemoryCommandBus)
 	return srv.Run()
 }
