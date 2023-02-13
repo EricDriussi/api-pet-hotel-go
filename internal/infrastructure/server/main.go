@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server/controllers"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server/middleware"
 	commandbus "github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus"
 	"github.com/gin-gonic/gin"
 )
@@ -17,8 +18,11 @@ type Server struct {
 }
 
 func New(host string, port uint, bookingService commandbus.Bus) Server {
+	engine_with_middlewares := gin.New()
+	engine_with_middlewares.Use(gin.Recovery(), gin.Logger()) // same as gin.Default()
+	engine_with_middlewares.Use(middleware.DiscoInferno)
 	srv := Server{
-		engine:   gin.New(),
+		engine:   engine_with_middlewares,
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
 
 		commandBus: bookingService,
