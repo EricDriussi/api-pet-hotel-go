@@ -1,0 +1,8 @@
+[*.go]
+# space/tab
+indent_style = tab
+# if indent_style is space, use this
+# indent_size = 4
+tab_width = 4
+quote_style = double
+max_line_length = 120
