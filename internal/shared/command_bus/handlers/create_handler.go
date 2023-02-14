@@ -5,8 +5,8 @@ import (
 	"errors"
 
 	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
-	command "github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus/commands"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/commands"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/definition"
 )
 
 type CreateBookingCommandHandler struct {
@@ -19,7 +19,7 @@ func NewCreateBooking(service service.Booking) CreateBookingCommandHandler {
 	}
 }
 
-func (h CreateBookingCommandHandler) Handle(ctx context.Context, cmd command.Command) error {
+func (h CreateBookingCommandHandler) Handle(ctx context.Context, cmd commandbus.Command) error {
 	createBookingCmd, ok := cmd.(commands.CreateBookingCommand)
 	if !ok {
 		// TODO.test?

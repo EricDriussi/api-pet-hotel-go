@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/command_bus/in_memory"
 	mysqlrepo "github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/repositories/mysql_repo"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server"
 	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus/commands"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus/handlers"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/commands"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/handlers"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/in_memory"
 
 	_ "github.com/go-sql-driver/mysql"
 )

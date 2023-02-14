@@ -1,6 +1,6 @@
 package commands
 
-import command "github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus"
+import command "github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/definition"
 
 const CreateBookingCommandType command.Type = "command.create.booking"
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/definition"
 )
 
 type CommandBus struct {

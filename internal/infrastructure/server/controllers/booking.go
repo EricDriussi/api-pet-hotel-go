@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	domain "github.com/EricDriussi/api-pet-hotel-go/internal/domain/booking"
-	commandbus "github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus/commands"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/commands"
+	commandbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/definition"
 	"github.com/gin-gonic/gin"
 )
 

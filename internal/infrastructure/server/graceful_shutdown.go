@@ -11,7 +11,7 @@ import (
 
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server/controllers"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server/middleware"
-	commandbus "github.com/EricDriussi/api-pet-hotel-go/internal/service/command_bus"
+	commandbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/definition"
 	"github.com/gin-gonic/gin"
 )
 
