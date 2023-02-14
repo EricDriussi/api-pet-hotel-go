@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/booking"
 	"github.com/huandu/go-sqlbuilder"
@@ -20,11 +21,12 @@ type sqlBooking struct {
 }
 
 type bookingRepo struct {
-	db *sql.DB
+	db      *sql.DB
+	timeout time.Duration
 }
 
 func NewBooking(db *sql.DB) *bookingRepo {
-	return &bookingRepo{db: db}
+	return &bookingRepo{db: db, timeout: 10 * time.Second}
 }
 
 func (r *bookingRepo) Save(ctx context.Context, booking domain.Booking) error {
@@ -35,7 +37,10 @@ func (r *bookingRepo) Save(ctx context.Context, booking domain.Booking) error {
 		Duration: booking.DurationAsString(),
 	}).Build()
 
-	if _, err := r.db.ExecContext(ctx, query, args...); err != nil {
+	timeoutCtx, cancel := context.WithTimeout(ctx, r.timeout)
+	defer cancel()
+
+	if _, err := r.db.ExecContext(timeoutCtx, query, args...); err != nil {
 		return fmt.Errorf("error persisting booking: %v", err)
 	}
 
