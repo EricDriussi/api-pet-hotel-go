@@ -2,7 +2,7 @@ package commandbus
 
 import "context"
 
-type Bus interface {
+type CommandBus interface {
 	Dispatch(context.Context, Command) error
 	Register(Type, Handler)
 }

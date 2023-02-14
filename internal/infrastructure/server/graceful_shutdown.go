@@ -20,7 +20,7 @@ type GracefulServer struct {
 	engine          *gin.Engine
 	context         context.Context
 	shutdownTimeout time.Duration
-	commandBus      commandbus.Bus
+	commandBus      commandbus.CommandBus
 }
 
 func (s *GracefulServer) registerRoutes() {
@@ -28,7 +28,7 @@ func (s *GracefulServer) registerRoutes() {
 	s.engine.POST("/booking", controllers.PostBooking(s.commandBus))
 }
 
-func NewGraceful(ctx context.Context, host string, port uint, commandBus commandbus.Bus) GracefulServer {
+func NewGraceful(ctx context.Context, host string, port uint, commandBus commandbus.CommandBus) GracefulServer {
 	engine_with_middlewares := gin.New()
 	engine_with_middlewares.Use(gin.Recovery(), gin.Logger()) // same as gin.Default()
 	engine_with_middlewares.Use(middleware.DiscoInferno)

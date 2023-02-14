@@ -14,10 +14,10 @@ type Server struct {
 	httpAddr string
 	engine   *gin.Engine
 
-	commandBus commandbus.Bus
+	commandBus commandbus.CommandBus
 }
 
-func New(host string, port uint, bookingService commandbus.Bus) Server {
+func New(host string, port uint, bookingService commandbus.CommandBus) Server {
 	engine_with_middlewares := gin.New()
 	engine_with_middlewares.Use(gin.Recovery(), gin.Logger()) // same as gin.Default()
 	engine_with_middlewares.Use(middleware.DiscoInferno)

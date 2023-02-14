@@ -3,6 +3,9 @@ package domain
 import (
 	"context"
 	"errors"
+
+	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/definition"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/events"
 )
 
 type BookingRepository interface {
@@ -19,6 +22,8 @@ type Booking struct {
 	id       bookingID
 	petName  petName
 	duration bookingDuration
+
+	events []eventbus.Event
 }
 
 func NewBooking(id, name, duration string) (Booking, error) {
@@ -35,11 +40,14 @@ func NewBooking(id, name, duration string) (Booking, error) {
 		return Booking{}, err
 	}
 
-	return Booking{
+	booking := Booking{
 		id:       idVO,
 		petName:  nameVO,
 		duration: durationVO,
-	}, nil
+	}
+
+	booking.Record(events.NewBookingCreated(id, name, duration))
+	return booking, nil
 }
 
 func (b Booking) IDAsString() string {
@@ -52,4 +60,15 @@ func (b Booking) DurationAsString() string {
 
 func (b Booking) PetNameAsString() string {
 	return b.petName.string()
+}
+
+func (b *Booking) Record(evt eventbus.Event) {
+	b.events = append(b.events, evt)
+}
+
+func (b Booking) PullEvents() []eventbus.Event {
+	evt := b.events
+	b.events = []eventbus.Event{}
+
+	return evt
 }

@@ -5,27 +5,34 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/booking"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
+	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
+	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/definition"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/events"
 	"github.com/EricDriussi/api-pet-hotel-go/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 )
 
 func Test_BookingService_CreateBooking(t *testing.T) {
 	bookingID, petName, bookingDuration := "37a0f027-15e6-47cc-a5d2-64183281087e", "Nice Pet Name", "1 months"
 
-	booking, err := domain.NewBooking(bookingID, petName, bookingDuration)
-	require.NoError(t, err)
-
 	t.Run("succeeds when repository returns no error", func(t *testing.T) {
 		bookingRepositoryMock := new(mocks.BookingRepository)
-		bookingRepositoryMock.On("Save", mock.Anything, booking).Return(nil)
+		bookingRepositoryMock.On("Save", mock.Anything, mock.AnythingOfType("domain.Booking")).Return(nil)
 
-		bookingService := service.NewBooking(bookingRepositoryMock)
+		eventBusMock := new(mocks.EventBus)
 
-		err = bookingService.RegisterBooking(context.Background(), bookingID, petName, bookingDuration)
+		eventBusMock.On("Publish", mock.Anything, mock.MatchedBy(func(eve []eventbus.Event) bool {
+			evt := eve[0]
+			p := evt.(events.BookingCreatedEvent)
+			return p.PetName == petName
+		})).Return(nil)
+
+		eventBusMock.On("Publish", mock.Anything, mock.AnythingOfType("[]event.Event")).Return(nil)
+
+		bookingService := service.NewBooking(bookingRepositoryMock, eventBusMock)
+
+		err := bookingService.RegisterBooking(context.Background(), bookingID, petName, bookingDuration)
 
 		bookingRepositoryMock.AssertExpectations(t)
 		assert.NoError(t, err)
@@ -33,13 +40,16 @@ func Test_BookingService_CreateBooking(t *testing.T) {
 
 	t.Run("fails when repository returns error", func(t *testing.T) {
 		bookingRepositoryMock := new(mocks.BookingRepository)
-		bookingRepositoryMock.On("Save", mock.Anything, booking).Return(errors.New("something unexpected happened"))
+		bookingRepositoryMock.On("Save", mock.Anything, mock.AnythingOfType("domain.Booking")).Return(errors.New("something unexpected happened"))
 
-		bookingService := service.NewBooking(bookingRepositoryMock)
+		eventBusMock := new(mocks.EventBus)
 
-		err = bookingService.RegisterBooking(context.Background(), bookingID, petName, bookingDuration)
+		bookingService := service.NewBooking(bookingRepositoryMock, eventBusMock)
+
+		err := bookingService.RegisterBooking(context.Background(), bookingID, petName, bookingDuration)
 
 		bookingRepositoryMock.AssertExpectations(t)
+		eventBusMock.AssertExpectations(t)
 		assert.Error(t, err)
 	})
 }

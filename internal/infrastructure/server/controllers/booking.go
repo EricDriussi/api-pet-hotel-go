@@ -16,7 +16,7 @@ type PostBookingRequest struct {
 	Duration string `json:"duration" binding:"required"`
 }
 
-func PostBooking(commandBus commandbus.Bus) gin.HandlerFunc {
+func PostBooking(commandBus commandbus.CommandBus) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var req PostBookingRequest
 		if err := ctx.BindJSON(&req); err != nil {

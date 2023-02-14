@@ -20,6 +20,8 @@ setup: ## Setup dev env
 .PHONY: mocks
 mocks: ## Create mocks
 	@mockery -r --case=snake --outpkg=mocks --output=test/mocks --name=BookingRepository
+	@mockery -r --case=snake --outpkg=mocks --output=test/mocks --name=CommandBus
+	@mockery -r --case=snake --outpkg=mocks --output=test/mocks --name=EventBus
 
 .PHONY: test
 test: ## Run tests
