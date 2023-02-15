@@ -28,16 +28,16 @@ func TestController_PostBooking(t *testing.T) {
 	r.POST("/booking", controllers.PostBooking(commandBus))
 
 	t.Run("return 201 when given a valid request", func(t *testing.T) {
-		createBookingReq := controllers.PostBookingRequest{
+		validRequestData := controllers.PostBookingRequest{
 			ID:       "8a1c5cdc-ba57-445a-994d-aa412d23723f",
 			PetName:  "A Pet",
 			Duration: "1 months",
 		}
 
-		b, err := json.Marshal(createBookingReq)
+		marshalledReqData, err := json.Marshal(validRequestData)
 		require.NoError(t, err)
 
-		req, err := http.NewRequest(http.MethodPost, "/booking", bytes.NewBuffer(b))
+		req, err := http.NewRequest(http.MethodPost, "/booking", bytes.NewBuffer(marshalledReqData))
 		require.NoError(t, err)
 
 		rec := httptest.NewRecorder()
@@ -50,15 +50,15 @@ func TestController_PostBooking(t *testing.T) {
 	})
 
 	t.Run("returns 400 when given a partial request", func(t *testing.T) {
-		createBookingReq := controllers.PostBookingRequest{
+		invalidRequestData := controllers.PostBookingRequest{
 			PetName:  "A Pet",
 			Duration: "1 months",
 		}
 
-		b, err := json.Marshal(createBookingReq)
+		marshalledReqData, err := json.Marshal(invalidRequestData)
 		require.NoError(t, err)
 
-		req, err := http.NewRequest(http.MethodPost, "/booking", bytes.NewBuffer(b))
+		req, err := http.NewRequest(http.MethodPost, "/booking", bytes.NewBuffer(marshalledReqData))
 		require.NoError(t, err)
 
 		rec := httptest.NewRecorder()
