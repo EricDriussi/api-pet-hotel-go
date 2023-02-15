@@ -1,6 +1,6 @@
 package events
 
-import eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/definition"
+import eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
 
 const BookingCreatedEventType eventbus.Type = "events.booking.created"
 

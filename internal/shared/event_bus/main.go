@@ -1,12 +1,22 @@
 package eventbus
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
 )
 
+type EventBus interface {
+	Publish(context.Context, []Event) error
+	Subscribe(Type, Subscriber)
+}
+
 type Type string
+
+type Subscriber interface {
+	Handle(context.Context, Event) error
+}
 
 type Event interface {
 	ID() string

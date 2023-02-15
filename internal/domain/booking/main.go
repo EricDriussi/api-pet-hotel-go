@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/definition"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/events"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/events"
+	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
 )
 
 type BookingRepository interface {

@@ -6,16 +6,16 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/events"
+	inmemory_eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/bus/in_memory"
 	mysqlrepo "github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/repositories/mysql_repo"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server"
 	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
 	counterService "github.com/EricDriussi/api-pet-hotel-go/internal/service/counter"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/service/subscribers"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/commands"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/handlers"
 	inmemory_commandbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/in_memory"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/events"
-	inmemory_eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/in_memory"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/subscribers"
 
 	_ "github.com/go-sql-driver/mysql"
 )

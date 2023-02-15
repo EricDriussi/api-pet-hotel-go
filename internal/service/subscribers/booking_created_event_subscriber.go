@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
+	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/events"
 	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/counter"
-	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/definition"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/events"
+	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
 )
 
 type BookingCreatedSubscriber struct {

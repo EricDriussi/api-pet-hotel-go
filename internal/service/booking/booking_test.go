@@ -5,9 +5,9 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/events"
 	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
-	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/definition"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus/events"
+	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
 	"github.com/EricDriussi/api-pet-hotel-go/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
