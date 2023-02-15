@@ -27,11 +27,11 @@ func Deploy() {
 }
 
 const (
-	host   = "localhost"
+	host   = "0.0.0.0"
 	port   = 6969
-	dbUser = "root"
-	dbPass = "root"
-	dbHost = "localhost"
+	dbUser = "admin"
+	dbPass = "admin"
+	dbHost = "mysql"
 	dbPort = "3306"
 	dbName = "pet_hotel"
 )

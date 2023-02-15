@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  pet-hotel-api:
+    build: .
+    ports:
+      - 6969:6969
+
+  mysql:
+    image: mysql:8.0.22
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: pet_hotel
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
+
+volumes:
+  mysql_data:
