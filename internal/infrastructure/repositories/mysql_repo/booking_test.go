@@ -20,10 +20,11 @@ func Test_BookingRepository_Save(t *testing.T) {
 
 	db, sqlMock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
 	require.NoError(t, err)
+	validSQLInsertStatement := "INSERT INTO bookings (id, pet_name, duration) VALUES (?, ?, ?)"
 
 	t.Run("returns no error if succeeds", func(t *testing.T) {
 		sqlMock.ExpectExec(
-			"INSERT INTO bookings (id, pet_name, duration) VALUES (?, ?, ?)").
+			validSQLInsertStatement).
 			WithArgs(bookingID, petName, bookingDuration).
 			WillReturnResult(sqlmock.NewResult(0, 1))
 
@@ -37,7 +38,7 @@ func Test_BookingRepository_Save(t *testing.T) {
 
 	t.Run("returns an error if fails", func(t *testing.T) {
 		sqlMock.ExpectExec(
-			"INSERT INTO bookings (id, pet_name, duration) VALUES (?, ?, ?)").
+			validSQLInsertStatement).
 			WithArgs(bookingID, petName, bookingDuration).
 			WillReturnError(errors.New("FAILED"))
 
