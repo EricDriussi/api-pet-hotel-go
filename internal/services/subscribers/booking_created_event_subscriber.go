@@ -5,15 +5,15 @@ import (
 	"errors"
 
 	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/events"
-	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/counter"
-	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/services"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
 )
 
 type BookingCreatedSubscriber struct {
-	service service.BookingCounterService
+	service services.BookingCounterService
 }
 
-func NewBookingCreatedSubscriber(service service.BookingCounterService) BookingCreatedSubscriber {
+func NewBookingCreatedSubscriber(service services.BookingCounterService) BookingCreatedSubscriber {
 	return BookingCreatedSubscriber{service: service}
 }
 

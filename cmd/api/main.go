@@ -9,12 +9,11 @@ import (
 	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/events"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/bus/in_memory"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/commands"
-	mysqlrepo "github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/repositories/mysql_repo"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/repositories/mysql_repo"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/server"
-	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
-	counterService "github.com/EricDriussi/api-pet-hotel-go/internal/service/counter"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/handlers"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/service/subscribers"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/services"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/services/handlers"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/services/subscribers"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -44,14 +43,13 @@ func bootstrap() error {
 
 	bookingRepository := mysqlrepo.NewBooking(db)
 	inMemoryEventBus := inmemory.NewEventBus()
-	bookingService := service.NewBooking(bookingRepository, inMemoryEventBus)
+	bookingService := services.NewBookingCreator(bookingRepository, inMemoryEventBus)
 
-	counterService := counterService.NewBookingCounter()
+	counterService := services.NewBookingCounter()
 	inMemoryEventBus.Subscribe(events.BookingCreatedEventType, subscribers.NewBookingCreatedSubscriber(counterService))
 
 	inMemoryCommandBus := inmemory.NewCommandBus()
-	createBookingCommandHandler := handlers.NewCreateBooking(bookingService)
-	inMemoryCommandBus.Register(commands.CreateBookingCommandType, createBookingCommandHandler)
+	inMemoryCommandBus.Register(commands.CreateBookingCommandType, handlers.NewCreateBooking(bookingService))
 
 	// srv := server.New(host, port, inMemoryCommandBus)
 	// return srv.Run()

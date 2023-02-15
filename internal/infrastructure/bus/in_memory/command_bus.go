@@ -21,7 +21,6 @@ func (b *CommandBus) Dispatch(ctx context.Context, cmd commandbus.Command) error
 	handler, ok := b.handlers[cmd.Type()]
 	if !ok {
 		log.Printf("No handler for %s", cmd.Type())
-		// TODO. return err and test
 		return nil
 	}
 

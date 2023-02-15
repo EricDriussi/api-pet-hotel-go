@@ -3,7 +3,7 @@ package inmemory
 import (
 	"context"
 
-	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
 )
 
 type EventBus struct {

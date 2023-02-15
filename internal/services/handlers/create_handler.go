@@ -5,15 +5,15 @@ import (
 	"errors"
 
 	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/commands"
-	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/services"
 	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus"
 )
 
 type CreateBookingCommandHandler struct {
-	service service.Booking
+	service services.Booking
 }
 
-func NewCreateBooking(service service.Booking) CreateBookingCommandHandler {
+func NewCreateBooking(service services.Booking) CreateBookingCommandHandler {
 	return CreateBookingCommandHandler{
 		service: service,
 	}
@@ -22,7 +22,6 @@ func NewCreateBooking(service service.Booking) CreateBookingCommandHandler {
 func (h CreateBookingCommandHandler) Handle(ctx context.Context, cmd commandbus.Command) error {
 	createBookingCmd, ok := cmd.(commands.CreateBookingCommand)
 	if !ok {
-		// TODO.test?
 		return errors.New("unexpected command")
 	}
 

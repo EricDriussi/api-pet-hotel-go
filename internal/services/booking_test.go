@@ -1,4 +1,4 @@
-package service_test
+package services_test
 
 import (
 	"context"
@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/events"
-	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
-	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/services"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
 	"github.com/EricDriussi/api-pet-hotel-go/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -30,7 +30,7 @@ func Test_BookingService_CreateBooking(t *testing.T) {
 			return p.PetName == petName
 		})).Return(nil)
 
-		bookingService := service.NewBooking(bookingRepositoryMock, eventBusMock)
+		bookingService := services.NewBookingCreator(bookingRepositoryMock, eventBusMock)
 
 		err := bookingService.RegisterBooking(context.Background(), bookingID, petName, bookingDuration)
 
@@ -44,7 +44,7 @@ func Test_BookingService_CreateBooking(t *testing.T) {
 
 		eventBusMock := new(mocks.EventBus)
 
-		bookingService := service.NewBooking(bookingRepositoryMock, eventBusMock)
+		bookingService := services.NewBookingCreator(bookingRepositoryMock, eventBusMock)
 
 		err := bookingService.RegisterBooking(context.Background(), bookingID, petName, bookingDuration)
 
@@ -60,7 +60,7 @@ func Test_BookingService_CreateBooking(t *testing.T) {
 		anEvent := mock.AnythingOfType("[]eventbus.Event")
 		eventBusMock.On("Publish", irrelevantMock, anEvent).Return(anError)
 
-		bookingService := service.NewBooking(bookingRepositoryMock, eventBusMock)
+		bookingService := services.NewBookingCreator(bookingRepositoryMock, eventBusMock)
 
 		err := bookingService.RegisterBooking(context.Background(), bookingID, petName, bookingDuration)
 

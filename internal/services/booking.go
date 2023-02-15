@@ -1,10 +1,10 @@
-package service
+package services
 
 import (
 	"context"
 
 	"github.com/EricDriussi/api-pet-hotel-go/internal/domain/booking"
-	eventbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/event_bus"
 )
 
 type Booking struct {
@@ -12,7 +12,7 @@ type Booking struct {
 	eventBus          eventbus.EventBus
 }
 
-func NewBooking(bookingRepository domain.BookingRepository, eventBus eventbus.EventBus) Booking {
+func NewBookingCreator(bookingRepository domain.BookingRepository, eventBus eventbus.EventBus) Booking {
 	return Booking{
 		bookingRepository: bookingRepository,
 		eventBus:          eventBus,
