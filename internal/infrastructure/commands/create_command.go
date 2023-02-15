@@ -1,8 +1,8 @@
 package commands
 
-import command "github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/definition"
+import "github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus"
 
-const CreateBookingCommandType command.Type = "command.create.booking"
+const CreateBookingCommandType commandbus.Type = "command.create.booking"
 
 type CreateBookingCommand struct {
 	Id       string
@@ -18,6 +18,6 @@ func NewCreateBooking(id, name, duration string) CreateBookingCommand {
 	}
 }
 
-func (c CreateBookingCommand) Type() command.Type {
+func (c CreateBookingCommand) Type() commandbus.Type {
 	return CreateBookingCommandType
 }

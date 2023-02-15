@@ -5,7 +5,7 @@ package mocks
 import (
 	context "context"
 
-	commandbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/definition"
+	commandbus "github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus"
 
 	mock "github.com/stretchr/testify/mock"
 )

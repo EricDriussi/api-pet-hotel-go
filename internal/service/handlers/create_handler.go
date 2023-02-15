@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
+	"github.com/EricDriussi/api-pet-hotel-go/internal/infrastructure/commands"
 	service "github.com/EricDriussi/api-pet-hotel-go/internal/service/booking"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/commands"
-	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus/definition"
+	"github.com/EricDriussi/api-pet-hotel-go/internal/shared/command_bus"
 )
 
 type CreateBookingCommandHandler struct {
